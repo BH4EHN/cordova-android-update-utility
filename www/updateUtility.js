@@ -34,16 +34,30 @@ UpdateUtility.prototype.getAppVersionNumber = function(callback) {
  * @param {FileTransferError} error
  */
 /**
+ * @typedef {object} ProgressEvent
+ * @property {Number} lengthComputable
+ * @property {Number} loaded
+ * @property {Number} total
+ */
+/**
+ * @callback DownloadApkProgressCallback
+ * @param {ProgressEvent} progressEvent
+ */
+/**
  *
  * @param url
  * @param {DownloadApkSuccessCallback} successCallback
  * @param failCallback
  */
-UpdateUtility.prototype.downloadApk = function(url, successCallback, failCallback) {
+UpdateUtility.prototype.downloadApk = function(url, successCallback, failCallback, progressCallback) {
     setTimeout(function() {
         var encodedUrl = encodeURI(url);
         var filePath = cordova.file.externalCacheDirectry + generateUUID() + '.apk';
-        (new FileTransfer()).download(
+        var fileTransfer = new FileTransfer();
+        if (progressCallback && typeof progressCallback == 'function') {
+            fileTransfer.onprogress = progressCallback;
+        }
+        fileTransfer.download(
             encodedUrl,
             filePath,
             function(entry) {
