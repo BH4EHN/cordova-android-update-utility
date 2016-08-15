@@ -52,7 +52,7 @@ UpdateUtility.prototype.getAppVersionNumber = function(callback) {
 UpdateUtility.prototype.downloadApk = function(url, successCallback, failCallback, progressCallback) {
     setTimeout(function() {
         var encodedUrl = encodeURI(url);
-        var filePath = cordova.file.externalCacheDirectry + generateUUID() + '.apk';
+        var filePath = cordova.file.externalCacheDirectory + generateUUID() + '.apk';
         var fileTransfer = new FileTransfer();
         if (progressCallback && typeof progressCallback == 'function') {
             fileTransfer.onprogress = progressCallback;
@@ -62,7 +62,7 @@ UpdateUtility.prototype.downloadApk = function(url, successCallback, failCallbac
             filePath,
             function(entry) {
                 if (successCallback && typeof successCallback == 'function') {
-                    successCallback(entry.toURL);
+                    successCallback(entry.toURL());
                 }
             },
             failCallback);
